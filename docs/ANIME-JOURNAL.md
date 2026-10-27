@@ -32,7 +32,7 @@ GIF 的 SHA-256：`939205ecb8ac5385867e795be3c776b69fe57aea0e92c10618ee0d85a333a
 
 `D:\BlogProjects\alice-blog\.local-backups\firefly-anime-v3-before-glass-20261028.tar.gz`
 
-约 28.1 MB，包含文章、配置、源码与图片；排除依赖、生成站点、Git 数据与备份目录自身。前一版的本地压缩包也继续保留。
+约 34.8 MB，包含文章、配置、源码与图片；排除依赖、生成站点、Git 数据与备份目录自身。前一版的本地压缩包也继续保留。
 
 需要查看备份，可以打开 [月夜书房备份分支](https://github.com/alicewarden/alicewarden.github.io/tree/backup-moonlit-before-gif-20261027)，通过 Code → Download ZIP 下载到其他文件夹。不要直接覆盖以后新增的文章。
 
