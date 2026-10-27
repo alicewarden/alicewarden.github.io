@@ -1,64 +1,63 @@
 ---
-// Keep the opening outside the Swup container; delegated replay survives navigation.
+// The supplied GIF stays byte-for-byte intact. A static first frame is used when hidden.
 ---
-<dialog id="moonlit-opening" aria-labelledby="opening-title" aria-describedby="opening-description">
-	<picture class="opening-scene" aria-hidden="true">
-		<source media="(max-width: 767px)" srcset="/images/moonlit-library-mobile.webp" />
-		<img src="/images/moonlit-library.webp" alt="" width="1672" height="940" loading="eager" />
-	</picture>
-	<div class="opening-shade" aria-hidden="true"></div>
-	<div class="opening-orbit" aria-hidden="true"><span></span><span></span></div>
-	<div class="opening-sparks" aria-hidden="true">{Array.from({ length: 12 }, (_, i) => <i style={"--i:" + i}></i>)}</div>
-	<div class="opening-copy">
-		<p class="opening-kicker">A LITTLE MAGIC, A LITTLE EVERYDAY</p>
-		<h2 id="opening-title">月色已至，<br /><em>故事正要开始。</em></h2>
-		<p id="opening-description">欢迎来到 Alice 的文字收藏室</p>
-		<div class="opening-rule" aria-hidden="true"><span></span></div>
-		<p class="opening-caption">久远寺有珠 · 月夜书房</p>
+<dialog id="moonlit-opening" aria-labelledby="opening-title" aria-describedby="opening-description" data-duration="11080">
+	<div class="mayo-ambient" aria-hidden="true"></div>
+	<header class="mayo-opening-header"><span id="opening-title">魔法使之夜 <i>／</i> OPENING</span><button type="button" class="opening-skip" autofocus>跳过开场 <span aria-hidden="true">↗</span></button></header>
+	<div class="mayo-cinema">
+		<div class="mayo-film-border" aria-hidden="true"><span>ALICE’S PRIVATE THEATER</span><span>✦</span></div>
+		<img id="mayo-opening-image" src="/images/mayo-opening-poster.webp" data-gif-src="/images/mayo-opening.gif" alt="魔法使之夜角色相聚的开场动画" width="800" height="393" />
+		<div class="mayo-progress" aria-hidden="true"><span></span></div>
+		<div class="mayo-cinema-caption"><p id="opening-description">片刻相逢，欢迎来到 Alice 的小小世界。</p><button type="button" data-enter-blog>进入博客 <span aria-hidden="true">→</span></button></div>
 	</div>
-	<button type="button" class="opening-skip" autofocus>跳过开场 <span aria-hidden="true">↗</span></button>
-	<div class="opening-footnote" aria-hidden="true"><span>ALICE / PERSONAL JOURNAL</span><span>MOONLIGHT ARCHIVE — 01</span></div>
+	<div class="opening-footnote" aria-hidden="true"><span>MAGIC HIDES IN EVERYDAY MOMENTS</span><span>ALICE / PERSONAL JOURNAL</span></div>
 </dialog>
-
 <script is:inline>
 	(() => {
 		const dialog = document.getElementById("moonlit-opening");
 		if (!(dialog instanceof HTMLDialogElement) || dialog.dataset.ready) return;
 		dialog.dataset.ready = "true";
-		const key = "alice-moonlit-opening-v1";
+		const image = dialog.querySelector("#mayo-opening-image");
+		const poster = image.getAttribute("src");
 		const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-		let timer;
-		let finishTimer;
-		let previousFocus;
+		const duration = Number(dialog.dataset.duration) || 11080;
+		const key = "alice-mayo-gif-opening-v3";
+		let timer, failSafe, finishTimer, previousFocus;
 		function finish() {
-			clearTimeout(timer);
+			clearTimeout(timer); clearTimeout(failSafe);
 			if (!dialog.open || dialog.classList.contains("is-closing")) return;
 			dialog.classList.add("is-closing");
 			finishTimer = setTimeout(() => {
 				dialog.close();
-				dialog.classList.remove("is-closing");
-				document.documentElement.classList.remove("opening-active");
+				dialog.classList.remove("is-closing", "is-playing");
 				if (previousFocus instanceof HTMLElement && previousFocus.isConnected && previousFocus !== document.body) previousFocus.focus({ preventScroll: true });
-			}, reduced.matches ? 0 : 500);
+			}, reduced.matches ? 0 : 350);
 		}
 		function play() {
 			if (dialog.open) return;
 			clearTimeout(finishTimer);
 			previousFocus = document.activeElement;
-			dialog.classList.remove("is-closing");
+			dialog.classList.remove("is-closing", "is-playing");
+			dialog.style.setProperty("--opening-duration", duration + "ms");
+			try { dialog.showModal(); } catch { return; }
 			document.documentElement.classList.add("opening-active");
-			try {
-				dialog.showModal();
-			} catch {
-				document.documentElement.classList.remove("opening-active");
-				return;
-			}
-			timer = setTimeout(finish, reduced.matches ? 1200 : 3600);
+			if (reduced.matches) { timer = setTimeout(finish, 1200); return; }
+			failSafe = setTimeout(finish, 20000);
+			image.onload = () => {
+				if (!dialog.open) return;
+				clearTimeout(failSafe);
+				dialog.classList.add("is-playing");
+				timer = setTimeout(finish, duration);
+			};
+			image.onerror = () => { clearTimeout(failSafe); timer = setTimeout(finish, 1200); };
+			image.src = image.dataset.gifSrc;
 		}
 		dialog.querySelector(".opening-skip").addEventListener("click", finish);
+		dialog.querySelector("[data-enter-blog]").addEventListener("click", finish);
 		dialog.addEventListener("cancel", (event) => { event.preventDefault(); finish(); });
 		dialog.addEventListener("close", () => {
-			clearTimeout(timer);
+			clearTimeout(timer); clearTimeout(failSafe);
+			image.onload = null; image.onerror = null; image.src = poster;
 			document.documentElement.classList.remove("opening-active");
 		});
 		document.addEventListener("click", (event) => {

@@ -2,7 +2,7 @@
 title: "从域名到主页：我的博客搭建记录"
 published: 2026-10-27
 description: "域名、仓库、主题和托管各自负责什么？把这次博客搭建过程整理成一张清楚的路线图。"
-image: "/images/covers/build.svg"
+image: "/images/banner-mobile.webp"
 tags: ["GitHub Pages","Firefly","建站"]
 category: "技术实践"
 draft: false

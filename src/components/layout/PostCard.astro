@@ -111,6 +111,7 @@ const minutes = remarkPluginFrontmatter.minutes;
     className,
   ]}
   style={style}
+  data-journal-category={category || "随笔"}
 >
   <!-- pinned icon -->
   <div
@@ -123,6 +124,7 @@ const minutes = remarkPluginFrontmatter.minutes;
       },
     ]}
   >
+    <div class="story-kicker">{pinned ? "PROLOGUE · 从这里开始" : "ALICE’S JOURNAL"}</div>
     <a
       href={url}
       class="post-card-title transition group w-full block font-bold mb-3 text-3xl text-90
@@ -172,6 +174,8 @@ const minutes = remarkPluginFrontmatter.minutes;
     >
       {descriptionText}
     </div>
+
+    <a href={url} class="story-read">阅读手记 <span aria-hidden="true">↗</span></a>
 
     <!-- bottom tags（与 stats 二选一） -->
     {showTagsAtBottom && bottomTags.length > 0 && (
@@ -246,6 +250,8 @@ const minutes = remarkPluginFrontmatter.minutes;
             class="transition opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 text-white text-5xl"
           />
         </div>
+        <span class="story-cover-label"><span aria-hidden="true">✦</span> {category || "随笔"}</span>
+        <span class="story-cover-frame" aria-hidden="true"></span>
         <CoverImage
           src={processedImage}
           basePath={getFileDirFromPath(entry.filePath || "")}

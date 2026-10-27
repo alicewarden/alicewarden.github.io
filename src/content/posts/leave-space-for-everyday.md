@@ -2,7 +2,7 @@
 title: "给生活留一点记录的位置"
 published: 2026-10-27
 description: "不是每篇文章都要有结论。把日常里值得停留的片刻，慢慢写成自己的文字。"
-image: "/images/covers/life.svg"
+image: "/images/mayo-opening-poster.webp"
 tags: ["日常","写作","随想"]
 category: "生活记录"
 draft: false

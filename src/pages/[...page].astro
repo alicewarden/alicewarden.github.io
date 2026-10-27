@@ -2,6 +2,7 @@
 import type { GetStaticPaths } from "astro";
 import Pagination from "@/components/common/Pagination.astro";
 import PostPage from "@/components/layout/PostPage.astro";
+import JournalShowcase from "@/components/layout/JournalShowcase.astro";
 import { siteConfig } from "@/config";
 import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
@@ -28,13 +29,7 @@ const heading =
 ---
 
 <MainGridLayout heading={heading}>
-  <section class="journal-heading" id="journal-start" aria-labelledby="journal-title">
-    <div>
-      <p class="journal-eyebrow">THE JOURNAL · 文字收藏室</p>
-      <h2 id="journal-title">最近，落在纸上的光</h2>
-    </div>
-    <a href="/archive/" class="journal-archive">全部文章 <span aria-hidden="true">↗</span></a>
-  </section>
+  <JournalShowcase firstPage={page.currentPage === 1} />
   <PostPage page={page} />
   {
     page.total > page.size && (

@@ -2,7 +2,7 @@
 title: "我的第一篇博客"
 published: 2026-10-27
 description: "给自己的文字找一个长期停留的地方。从今天开始，记录学习，也记录生活。"
-image: "/images/covers/welcome.svg"
+image: "/images/banner-desktop.webp"
 tags: ["博客","开始"]
 category: "随笔"
 draft: false
