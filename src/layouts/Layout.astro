@@ -8,6 +8,7 @@ import FancyboxManager from "@components/features/FancyboxManager.astro";
 import FontSetup from "@components/features/FontSetup.astro";
 import GithubCardManager from "@components/features/GithubCardManager.astro";
 import MusicManager from "@components/features/MusicManager.astro";
+import MoonlitOpening from "@components/features/MoonlitOpening.astro";
 import MusicPlayerView from "@components/features/MusicPlayerView.astro";
 import SakuraEffect from "@components/features/SakuraEffect.astro";
 import WavesEffect from "@components/features/WavesEffect.astro";
@@ -40,6 +41,7 @@ import { getCanonicalUrl, url } from "@/utils/url-utils";
 
 import "@/styles/main.css";
 import "@/styles/immersive-reading.css";
+import "@/styles/moonlit.css";
 import "@/styles/variables.styl";
 import "@rehype-callouts-theme";
 
@@ -531,6 +533,7 @@ const ogImageAlt = propsOgImageAlt ?? pageTitle;
       })();
     </script>
 
+    <MoonlitOpening />
     <div id="progress-bar"></div>
 
     {/* 卡片样式：根据 localStorage 覆盖默认配置 */}

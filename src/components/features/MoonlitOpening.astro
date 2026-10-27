@@ -1,0 +1,74 @@
+---
+// Keep the opening outside the Swup container; delegated replay survives navigation.
+---
+<dialog id="moonlit-opening" aria-labelledby="opening-title" aria-describedby="opening-description">
+	<picture class="opening-scene" aria-hidden="true">
+		<source media="(max-width: 767px)" srcset="/images/moonlit-library-mobile.webp" />
+		<img src="/images/moonlit-library.webp" alt="" width="1672" height="940" loading="eager" />
+	</picture>
+	<div class="opening-shade" aria-hidden="true"></div>
+	<div class="opening-orbit" aria-hidden="true"><span></span><span></span></div>
+	<div class="opening-sparks" aria-hidden="true">{Array.from({ length: 12 }, (_, i) => <i style={"--i:" + i}></i>)}</div>
+	<div class="opening-copy">
+		<p class="opening-kicker">A LITTLE MAGIC, A LITTLE EVERYDAY</p>
+		<h2 id="opening-title">月色已至，<br /><em>故事正要开始。</em></h2>
+		<p id="opening-description">欢迎来到 Alice 的文字收藏室</p>
+		<div class="opening-rule" aria-hidden="true"><span></span></div>
+		<p class="opening-caption">久远寺有珠 · 月夜书房</p>
+	</div>
+	<button type="button" class="opening-skip" autofocus>跳过开场 <span aria-hidden="true">↗</span></button>
+	<div class="opening-footnote" aria-hidden="true"><span>ALICE / PERSONAL JOURNAL</span><span>MOONLIGHT ARCHIVE — 01</span></div>
+</dialog>
+
+<script is:inline>
+	(() => {
+		const dialog = document.getElementById("moonlit-opening");
+		if (!(dialog instanceof HTMLDialogElement) || dialog.dataset.ready) return;
+		dialog.dataset.ready = "true";
+		const key = "alice-moonlit-opening-v1";
+		const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+		let timer;
+		let finishTimer;
+		let previousFocus;
+		function finish() {
+			clearTimeout(timer);
+			if (!dialog.open || dialog.classList.contains("is-closing")) return;
+			dialog.classList.add("is-closing");
+			finishTimer = setTimeout(() => {
+				dialog.close();
+				dialog.classList.remove("is-closing");
+				document.documentElement.classList.remove("opening-active");
+				if (previousFocus instanceof HTMLElement && previousFocus.isConnected && previousFocus !== document.body) previousFocus.focus({ preventScroll: true });
+			}, reduced.matches ? 0 : 500);
+		}
+		function play() {
+			if (dialog.open) return;
+			clearTimeout(finishTimer);
+			previousFocus = document.activeElement;
+			dialog.classList.remove("is-closing");
+			document.documentElement.classList.add("opening-active");
+			try {
+				dialog.showModal();
+			} catch {
+				document.documentElement.classList.remove("opening-active");
+				return;
+			}
+			timer = setTimeout(finish, reduced.matches ? 1200 : 3600);
+		}
+		dialog.querySelector(".opening-skip").addEventListener("click", finish);
+		dialog.addEventListener("cancel", (event) => { event.preventDefault(); finish(); });
+		dialog.addEventListener("close", () => {
+			clearTimeout(timer);
+			document.documentElement.classList.remove("opening-active");
+		});
+		document.addEventListener("click", (event) => {
+			if (event.target instanceof Element && event.target.closest("[data-replay-opening]")) play();
+		});
+		let seen = false;
+		try { seen = sessionStorage.getItem(key) === "seen"; } catch {}
+		if (document.body.classList.contains("is-home") && !seen) {
+			try { sessionStorage.setItem(key, "seen"); } catch {}
+			if (!reduced.matches) play();
+		}
+	})();
+</script>
