@@ -1,0 +1,23 @@
+---
+import { getCategoryList, getSortedPostsList, getTagList } from "@/utils/content-utils";
+interface Props { firstPage: boolean; }
+const { firstPage } = Astro.props;
+const [posts, categories, tags] = await Promise.all([getSortedPostsList(), getCategoryList(), getTagList()]);
+---
+{firstPage && <section class="journal-welcome" aria-labelledby="welcome-title">
+	<div class="journal-constellation" aria-hidden="true"><span>☾</span><i></i><i></i><i></i></div>
+	<div class="journal-welcome-copy">
+		<p class="journal-eyebrow">ALICE’S ATELIER <span>✦</span> 小小的文字魔法</p>
+		<h2 id="welcome-title">在日常里，收集一点<span>魔法。</span></h2>
+		<p>把偶然的灵感，写成可以重逢的故事。</p>
+	</div>
+	<div class="journal-counts" aria-label="博客内容统计">
+		<a href="/archive/"><strong>{String(posts.length).padStart(2, "0")}</strong><span>篇手记 <i aria-hidden="true">↗</i></span></a>
+		<a href="/categories/"><strong>{String(categories.length).padStart(2, "0")}</strong><span>个篇章 <i aria-hidden="true">↗</i></span></a>
+		<a href="/tags/"><strong>{String(tags.length).padStart(2, "0")}</strong><span>枚标签 <i aria-hidden="true">↗</i></span></a>
+	</div>
+</section>}
+<section class="journal-heading" id="journal-start" aria-labelledby="journal-title">
+	<div><p class="journal-eyebrow">STORIES BEHIND THE STARS</p><h2 id="journal-title"><span aria-hidden="true">✧</span> 最近，落在纸上的光</h2></div>
+	<a href="/archive/" class="journal-archive">全部文章 <span aria-hidden="true">↗</span></a>
+</section>
