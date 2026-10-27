@@ -28,6 +28,13 @@ const heading =
 ---
 
 <MainGridLayout heading={heading}>
+  <section class="journal-heading" id="journal-start" aria-labelledby="journal-title">
+    <div>
+      <p class="journal-eyebrow">THE JOURNAL · 文字收藏室</p>
+      <h2 id="journal-title">最近，落在纸上的光</h2>
+    </div>
+    <a href="/archive/" class="journal-archive">全部文章 <span aria-hidden="true">↗</span></a>
+  </section>
   <PostPage page={page} />
   {
     page.total > page.size && (
