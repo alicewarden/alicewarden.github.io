@@ -2,7 +2,7 @@
 title: "把学习笔记写成以后还能用的东西"
 published: 2026-10-27
 description: "不只保存结论，也保存问题、过程和验证方法。让笔记成为下一次遇到问题时的起点。"
-image: "/images/covers/learn.svg"
+image: "/images/avatar.jpg"
 tags: ["学习方法","笔记","复盘"]
 category: "学习笔记"
 draft: false
