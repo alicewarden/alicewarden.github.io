@@ -1,0 +1,65 @@
+<script>
+	// Delegation also covers cards replaced by Swup without installing more listeners.
+	const enabled = window.matchMedia(
+		"(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)",
+	);
+	const selector = ".post-card-wrapper, .journal-welcome, #category-bar, #left-sidebar .card-base, #left-sidebar widget-layout";
+	let active: HTMLElement | null = null;
+	let glow: HTMLElement | null = null;
+	let frame = 0;
+	let targetX = 0;
+	let targetY = 0;
+	let x = 0;
+	let y = 0;
+
+	function clear() {
+		cancelAnimationFrame(frame);
+		frame = 0;
+		active?.classList.remove("journal-glow-active");
+		active = null;
+		glow = null;
+	}
+
+	function draw() {
+		frame = 0;
+		if (!active?.isConnected || !glow) { clear(); return; }
+		x += (targetX - x) * 0.22;
+		y += (targetY - y) * 0.22;
+		glow.style.setProperty("--glow-x", `${x.toFixed(1)}px`);
+		glow.style.setProperty("--glow-y", `${y.toFixed(1)}px`);
+		if (Math.abs(targetX - x) + Math.abs(targetY - y) > 0.25) {
+			frame = requestAnimationFrame(draw);
+		}
+	}
+
+	document.addEventListener("pointermove", (event) => {
+		if (!enabled.matches || event.pointerType === "touch" || !document.body.classList.contains("is-home")) { clear(); return; }
+		const card = event.target instanceof Element ? event.target.closest<HTMLElement>(selector) : null;
+		if (!card) { clear(); return; }
+		const rect = card.getBoundingClientRect();
+		targetX = event.clientX - rect.left;
+		targetY = event.clientY - rect.top;
+		if (card !== active) {
+			clear();
+			active = card;
+			glow = card.querySelector<HTMLElement>(":scope > .journal-card-glow");
+			if (!glow) {
+				glow = document.createElement("span");
+				glow.className = "journal-card-glow";
+				glow.setAttribute("aria-hidden", "true");
+				card.appendChild(glow);
+			}
+			x = targetX; y = targetY;
+			card.classList.add("journal-glow-active");
+		}
+		if (!frame) frame = requestAnimationFrame(draw);
+	}, { passive: true });
+
+	document.addEventListener("pointerout", (event) => {
+		if (active && (!(event.relatedTarget instanceof Node) || !active.contains(event.relatedTarget))) clear();
+	}, { passive: true });
+	window.addEventListener("scroll", clear, { passive: true, capture: true });
+	window.addEventListener("blur", clear);
+	document.addEventListener("visibilitychange", () => { if (document.hidden) clear(); });
+	enabled.addEventListener("change", clear);
+</script>
