@@ -8,6 +8,7 @@ import FancyboxManager from "@components/features/FancyboxManager.astro";
 import FontSetup from "@components/features/FontSetup.astro";
 import GithubCardManager from "@components/features/GithubCardManager.astro";
 import MusicManager from "@components/features/MusicManager.astro";
+import JournalMotion from "@components/features/JournalMotion.astro";
 import MoonlitOpening from "@components/features/MoonlitOpening.astro";
 import MusicPlayerView from "@components/features/MusicPlayerView.astro";
 import SakuraEffect from "@components/features/SakuraEffect.astro";
@@ -534,6 +535,7 @@ const ogImageAlt = propsOgImageAlt ?? pageTitle;
     </script>
 
     <MoonlitOpening />
+    <JournalMotion />
     <div id="progress-bar"></div>
 
     {/* 卡片样式：根据 localStorage 覆盖默认配置 */}
